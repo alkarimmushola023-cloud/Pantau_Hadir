@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin — Pantau Hadir</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand-area">
+        <div class="logo-box"><img class="logo-img" src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir"></div>
+      </div>
+      <nav>
+        <a href="admin-dashboard.html" class="active"><span id="i-dash"></span> Dashboard</a>
+        <a href="rekapitulasi-absensi.html"><span id="i-rekap"></span> Rekapitulasi Absensi</a>
+        <a href="data-pekerja.html"><span id="i-pekerja"></span> Data Pekerja</a>
+      </nav>
+      <div class="side-foot">
+        <a href="#" data-logout><span id="i-out"></span> Keluar</a>
+      </div>
+    </aside>
+    <div class="overlay"></div>
+
+    <!-- MAIN -->
+    <div class="admin-main">
+      <header class="topbar">
+        <div class="flex gap-12">
+          <button class="menu-toggle" aria-label="Buka menu"><span id="i-menu"></span></button>
+          <div>
+            <h2 id="companyName">PT. Jalan Baru</h2>
+            <div class="clock" id="clockDate"></div>
+          </div>
+        </div>
+        <div class="flex gap-16">
+          <div class="clock" id="clockTime" style="font-size:15px;font-weight:700;color:var(--ink)"></div>
+          <div class="user-chip">
+            <div class="avatar"><span id="i-avatar"></span></div>
+            <div>
+              <div style="font-weight:700;font-size:13px">Administrator</div>
+              <div class="text-xs text-muted">Admin</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page">
+        <div class="page-head">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Selamat datang, Administrator! Ringkasan kehadiran hari ini.</p>
+          </div>
+          <a href="rekapitulasi-absensi.html" class="btn btn-primary"><span id="i-detail"></span> Lihat Detail Absensi</a>
+        </div>
+
+        <!-- STATISTIK -->
+        <div class="stat-grid" id="statGrid"></div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px" class="dash-grid">
+          <!-- CHART 7 HARI -->
+          <div class="card chart-card">
+            <div class="flex between mb-16">
+              <h3 style="font-size:16px">Tren Kehadiran 7 Hari Terakhir</h3>
+              <span class="badge badge-primary" id="avgBadge"></span>
+            </div>
+            <div class="bars" id="bars"></div>
+          </div>
+          <!-- STATUS HARI INI -->
+          <div class="card card-pad">
+            <h3 style="font-size:16px;margin-bottom:14px">Status Hari Ini</h3>
+            <div id="statusList" style="display:flex;flex-direction:column;gap:10px"></div>
+            <div class="mt-24" style="border-top:1px solid var(--line);padding-top:14px">
+              <div class="text-sm text-muted mb-8">Persentase Kehadiran</div>
+              <div style="height:10px;background:var(--line);border-radius:99px;overflow:hidden">
+                <div id="pctBar" style="height:100%;background:linear-gradient(90deg,var(--primary),#22d3ee);border-radius:99px;width:0%;transition:width .8s ease"></div>
+              </div>
+              <div class="text-right mt-8" style="font-weight:800;font-size:18px" id="pctText">0%</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    PH.requireRole('admin');
+    document.getElementById('i-dash').innerHTML = PH.icon('layout');
+    document.getElementById('i-rekap').innerHTML = PH.icon('clipboard');
+    document.getElementById('i-pekerja').innerHTML = PH.icon('users');
+    document.getElementById('i-out').innerHTML = PH.icon('logout');
+    document.getElementById('i-menu').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
+    document.getElementById('i-avatar').innerHTML = PH.icon('shield');
+    document.getElementById('i-detail').innerHTML = PH.icon('clipboard');
+    document.getElementById('companyName').textContent = PH.getCompany().name;
+    PH.startClock(document.getElementById('clockDate'), document.getElementById('clockTime'));
+
+    var BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    function key(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+
+    var workers = PH.getWorkers();
+    var att = PH.getAttendance();
+    var today = key(new Date());
+    var todayRecs = att.filter(function(a){return a.date===today;});
+
+    var total = workers.length;
+    var hadir = todayRecs.filter(function(a){return a.status==='Hadir';}).length;
+    var terlambat = todayRecs.filter(function(a){return a.status==='Terlambat';}).length;
+    var alpha = total - todayRecs.length;
+    var pct = total ? Math.round(((hadir+terlambat)/total)*100) : 0;
+
+    var stats = [
+      {cls:'blue', ico:'users', num:total, lbl:'Total Pekerja', sub:'Terdaftar aktif'},
+      {cls:'green', ico:'check', num:hadir, lbl:'Tepat Waktu', sub:total?Math.round(hadir/total*100):0+'% dari total'},
+      {cls:'amber', ico:'clock', num:terlambat, lbl:'Terlambat', sub:'Masuk setelah 07:30'},
+      {cls:'red', ico:'x', num:alpha, lbl:'Belum Absen / Alpha', sub:total?Math.round(alpha/total*100):0+'% dari total'}
+    ];
+    document.getElementById('statGrid').innerHTML = stats.map(function(s){
+      return '<div class="stat-card '+s.cls+'"><div class="stat-ico">'+PH.icon(s.ico)+'</div>'+
+        '<div class="num">'+s.num+'</div><div class="lbl">'+s.lbl+'</div><div class="sub text-muted">'+s.sub+'</div></div>';
+    }).join('');
+
+    // Status list
+    var statuses = [
+      {c:'success', t:'Hadir Tepat Waktu', n:hadir},
+      {c:'warning', t:'Terlambat', n:terlambat},
+      {c:'danger', t:'Belum Absen', n:alpha}
+    ];
+    document.getElementById('statusList').innerHTML = statuses.map(function(s){
+      return '<div class="flex between"><span class="badge badge-'+s.c+'">'+s.t+'</span><strong>'+s.n+'</strong></div>';
+    }).join('');
+
+    setTimeout(function(){
+      document.getElementById('pctBar').style.width = pct+'%';
+      document.getElementById('pctText').textContent = pct+'%';
+    }, 200);
+
+    // 7-day chart
+    var days = [];
+    var max = 1;
+    for (var i=6;i>=0;i--){
+      var d = new Date(); d.setDate(d.getDate()-i);
+      var k = key(d);
+      var cnt = att.filter(function(a){return a.date===k;}).length;
+      max = Math.max(max, cnt);
+      days.push({label:String(d.getDate())+' '+BULAN[d.getMonth()], cnt:cnt, dow:d.getDay()});
+    }
+    document.getElementById('bars').innerHTML = days.map(function(d){
+      var h = Math.round((d.cnt/max)*100);
+      var weekend = d.dow===0||d.dow===6;
+      return '<div class="bar-col"><div class="bar" style="height:'+(d.cnt?Math.max(h,4):2)+'%;'+(weekend?'opacity:.35;background:#94a3b8':'')+'"><span>'+(d.cnt||'')+'</span></div><small>'+d.label+'</small></div>';
+    }).join('');
+    var avg = Math.round(days.reduce(function(s,d){return s+d.cnt;},0)/7);
+    document.getElementById('avgBadge').textContent = 'Rata-rata: '+avg+' orang/hari';
+  </script>
+  <style>@media(max-width:900px){.dash-grid{grid-template-columns:1fr!important}}</style>
+</body>
+</html>

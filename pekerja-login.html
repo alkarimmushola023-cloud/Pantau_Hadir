@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk Pekerja — Pantau Hadir</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/images/logo-pantau-hadir.jpg">
+</head>
+<body class="worker-login-body">
+  <div class="worker-login-wrap">
+    <a href="index.html" class="back-btn" aria-label="Kembali"><img src="assets/images/icons/undo-2.svg" alt="" width="22" height="22"></a>
+
+    <div style="text-align:center;margin:8px 0 26px">
+      <img src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir" style="height:110px;width:auto;margin:0 auto">
+    </div>
+
+    <h1 class="masuk-heading">MASUK</h1>
+
+    <form id="loginForm" novalidate>
+      <div class="field2" id="f-nik">
+        <label for="nik">NIK</label>
+        <input class="input2" type="text" id="nik" name="nik" placeholder="Masukkan NIK" required autocomplete="username" autofocus>
+        <p class="error-msg">NIK wajib diisi.</p>
+      </div>
+      <div class="field2" id="f-pass">
+        <label for="kata-sandi">Kata Sandi</label>
+        <div style="position:relative">
+          <input class="input2" type="password" id="kata-sandi" name="kata-sandi" placeholder="Masukkan Kata Sandi" required autocomplete="current-password">
+          <button type="button" class="toggle-pass2" id="togglePass" aria-label="Tampilkan/sembunyikan kata sandi"><img src="assets/images/icons/eye-off.svg" width="20" height="20" alt=""></button>
+        </div>
+        <p class="error-msg">Kata sandi wajib diisi.</p>
+      </div>
+      <button type="submit" class="btn-masuk" id="submitBtn">
+        <img src="assets/images/icons/log-in.svg" width="20" height="20" alt=""> Masuk
+      </button>
+    </form>
+
+    <div class="demo-hint" style="margin-top:18px">
+      <b>Demo:</b> NIK <b>P0001</b> (s.d. P0020) · Kata Sandi <b>123456</b>
+    </div>
+  </div>
+
+  <div class="construction-foot"></div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    if (PH.getSession() && PH.getSession().role === 'worker') location.replace('pekerja-dashboard.html');
+    document.getElementById('togglePass').addEventListener('click', function(){
+      var inp = document.getElementById('kata-sandi');
+      var show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      this.querySelector('img').src = 'assets/images/icons/' + (show ? 'eye.svg' : 'eye-off.svg');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      var nik = document.getElementById('nik').value.trim().toUpperCase();
+      var pass = document.getElementById('kata-sandi').value;
+      var ok = true;
+      [['f-nik', nik], ['f-pass', pass]].forEach(function(x){
+        document.getElementById(x[0]).classList.toggle('invalid', !x[1]);
+        if (!x[1]) ok = false;
+      });
+      if (!ok){ PH.toast('Lengkapi NIK dan Kata Sandi.', 'error'); return; }
+      var btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Memverifikasi…';
+      setTimeout(function(){
+        var worker = PH.getWorkers().find(function(w){ return w.nik.toUpperCase() === nik; });
+        if (!worker){ reset(btn); PH.toast('NIK tidak ditemukan. Hubungi admin.', 'error'); return; }
+        if (worker.password !== pass){ reset(btn); PH.toast('Kata sandi salah.', 'error'); return; }
+        PH.setSession({ role:'worker', workerId:worker.id, nik:worker.nik, nama:worker.nama, site:worker.site, loginAt:new Date().toISOString() });
+        location.href = 'pekerja-dashboard.html?ok=' + encodeURIComponent('Selamat datang, ' + worker.nama.split(' ')[0] + '!');
+      }, 500);
+      function reset(b){ b.disabled = false; b.innerHTML = '<img src="assets/images/icons/log-in.svg" width="20" height="20" alt=""> Masuk'; }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantau Hadir — Sistem Absensi Pekerja Proyek</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3Cpath d='M4 15v-3a6 6 0 0 1 6-6'/%3E%3Cpath d='M14 6a6 6 0 0 1 6 6v3'/%3E%3C/svg%3E">
+</head>
+<body class="auth-body img-bg">
+  <main class="auth-main">
+    <div class="landing-hero">
+      <div class="logo-box" style="margin:0 auto;padding:10px 16px"><img class="logo-img" src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir" style="height:52px"></div>
+      <h1>Pantau <span>Hadir</span></h1>
+      <p>Sistem Absensi Pekerja Proyek berbasis web — catat kehadiran dengan selfie & lokasi, pantau real-time oleh admin.</p>
+      <div class="role-grid">
+        <a href="admin-login.html" class="role-card admin">
+          <div class="role-ico" id="ico-admin"></div>
+          <h3>Masuk sebagai Admin</h3>
+          <p>Kelola data pekerja, pantau kehadiran, & cetak rekapitulasi.</p>
+          <div class="arrow">Masuk <span id="arr-admin"></span></div>
+        </a>
+        <a href="pekerja-login.html" class="role-card worker">
+          <div class="role-ico" id="ico-worker"></div>
+          <h3>Masuk sebagai Pekerja</h3>
+          <p>Absen masuk & pulang langsung dari lokasi proyek.</p>
+          <div class="arrow">Masuk <span id="arr-worker"></span></div>
+        </a>
+      </div>
+    </div>
+  </main>
+  <footer class="auth-foot">&copy; 2026 Pantau Hadir — Sistem Absensi Pekerja Proyek</footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.getElementById('ico-admin').innerHTML = PH.icon('shield');
+    document.getElementById('ico-worker').innerHTML = PH.icon('hard-hat');
+    document.getElementById('arr-admin').innerHTML = PH.icon('arrow-right');
+    document.getElementById('arr-worker').innerHTML = PH.icon('arrow-right');
+  </script>
+</body>
+</html>
