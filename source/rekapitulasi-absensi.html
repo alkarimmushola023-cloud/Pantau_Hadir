@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rekapitulasi Absensi — Pantau Hadir</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="brand-area">
+        <div class="logo-mark" id="logo"></div>
+        <div class="brand">Pantau Hadir<small>Admin</small></div>
+      </div>
+      <nav>
+        <a href="admin-dashboard.html"><span id="i-dash"></span> Dashboard</a>
+        <a href="rekapitulasi-absensi.html" class="active"><span id="i-rekap"></span> Rekapitulasi Absensi</a>
+        <a href="data-pekerja.html"><span id="i-pekerja"></span> Data Pekerja</a>
+      </nav>
+      <div class="side-foot">
+        <a href="#" data-logout><span id="i-out"></span> Keluar</a>
+      </div>
+    </aside>
+    <div class="overlay"></div>
+
+    <div class="admin-main">
+      <header class="topbar">
+        <div class="flex gap-12">
+          <button class="menu-toggle" aria-label="Buka menu"><span id="i-menu"></span></button>
+          <h2 id="companyName">PT. Jalan Baru</h2>
+        </div>
+        <div class="user-chip">
+          <div class="avatar"><span id="i-avatar"></span></div>
+          <div><div style="font-weight:700;font-size:13px">Administrator</div><div class="text-xs text-muted">Admin</div></div>
+        </div>
+      </header>
+
+      <main class="page">
+        <div class="page-head no-print">
+          <div>
+            <h1>Rekapitulasi Absensi Pekerja</h1>
+            <p>Lihat dan kelola data kehadiran pekerja proyek.</p>
+          </div>
+          <div class="flex gap-12">
+            <button class="btn btn-ghost" id="btnCsv"><span id="i-csv"></span> Unduh CSV</button>
+            <button class="btn btn-ghost" onclick="window.print()"><span id="i-print"></span> Cetak</button>
+          </div>
+        </div>
+
+        <div class="filter-panel no-print">
+          <div class="field">
+            <label for="f-nama">Nama Pekerja</label>
+            <div class="input-wrap"><span id="i-search"></span>
+              <input class="input" type="text" id="f-nama" placeholder="Cari nama…">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-tanggal">Tanggal Absensi</label>
+            <input class="input" type="date" id="f-tanggal">
+          </div>
+          <div class="field">
+            <label for="f-status">Status Kehadiran</label>
+            <select id="f-status">
+              <option value="">Semua Status</option>
+              <option value="Hadir">Hadir</option>
+              <option value="Terlambat">Terlambat</option>
+              <option value="Alpha">Alpha (Belum Absen)</option>
+            </select>
+          </div>
+          <div class="flex gap-12">
+            <button class="btn btn-primary" id="btnCari" style="flex:1"><span id="i-find"></span> Cari</button>
+            <button class="btn btn-ghost" id="btnReset"><span id="i-x"></span> Reset</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th><th>Nama</th><th>Tanggal</th><th>Jam Masuk</th><th>Bukti Masuk</th><th>Jam Pulang</th><th>Bukti Pulang</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+          <div class="empty-state" id="empty" style="display:none">
+            <span id="i-empty"></span>
+            <p>Tidak ada data absensi yang cocok dengan filter.</p>
+          </div>
+        </div>
+        <div class="flex between" style="flex-wrap:wrap;gap:12px;margin-top:14px">
+          <div class="text-sm text-muted" id="info"></div>
+          <div class="pagination no-print" id="pagination"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    PH.requireRole('admin');
+    document.getElementById('logo').innerHTML = PH.icon('hard-hat');
+    document.getElementById('i-dash').innerHTML = PH.icon('layout');
+    document.getElementById('i-rekap').innerHTML = PH.icon('clipboard');
+    document.getElementById('i-pekerja').innerHTML = PH.icon('users');
+    document.getElementById('i-out').innerHTML = PH.icon('logout');
+    document.getElementById('i-menu').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
+    document.getElementById('i-avatar').innerHTML = PH.icon('shield');
+    document.getElementById('i-csv').innerHTML = PH.icon('file-spreadsheet');
+    document.getElementById('i-print').innerHTML = PH.icon('printer');
+    document.getElementById('i-search').innerHTML = PH.icon('search');
+    document.getElementById('i-find').innerHTML = PH.icon('search');
+    document.getElementById('i-x').innerHTML = PH.icon('x');
+    document.getElementById('i-empty').innerHTML = PH.icon('clipboard');
+    document.getElementById('companyName').textContent = PH.getCompany().name;
+
+    var PER_PAGE = 10, page = 1, filtered = [];
+
+    function statusBadge(s){
+      if (s==='Hadir') return '<span class="badge badge-success">Hadir</span>';
+      if (s==='Terlambat') return '<span class="badge badge-warning">Terlambat</span>';
+      return '<span class="badge badge-danger">Alpha</span>';
+    }
+
+    function applyFilter(){
+      var q = document.getElementById('f-nama').value.trim().toLowerCase();
+      var tgl = document.getElementById('f-tanggal').value;
+      var st = document.getElementById('f-status').value;
+      var all = PH.getAttendance().slice();
+      // include alpha: workers with no record on a given date when date filter active
+      if (tgl) {
+        var recsOnDate = all.filter(function(a){return a.date===tgl;});
+        var ids = recsOnDate.map(function(a){return a.workerId;});
+        PH.getWorkers().forEach(function(w){
+          if (ids.indexOf(w.id)===-1) {
+            all.push({id:'alpha-'+w.id+'-'+tgl, workerId:w.id, nik:w.nik, nama:w.nama, site:w.site, date:tgl, checkIn:null, checkOut:null, status:'Alpha', photoIn:null, photoOut:null});
+          }
+        });
+      }
+      filtered = all.filter(function(a){
+        var mq = !q || a.nama.toLowerCase().indexOf(q)>-1 || (a.nik||'').toLowerCase().indexOf(q)>-1;
+        var mt = !tgl || a.date===tgl;
+        var ms = !st || a.status===st;
+        return mq && mt && ms;
+      }).sort(function(a,b){
+        if (a.date!==b.date) return b.date.localeCompare(a.date);
+        return (a.checkIn||'').localeCompare(b.checkIn||'');
+      });
+      var maxPage = Math.max(1, Math.ceil(filtered.length/PER_PAGE));
+      if (page>maxPage) page=maxPage;
+      render();
+    }
+
+    function render(){
+      var tbody = document.getElementById('tbody');
+      var start = (page-1)*PER_PAGE;
+      var rows = filtered.slice(start, start+PER_PAGE);
+      document.getElementById('empty').style.display = filtered.length?'none':'block';
+      tbody.innerHTML = rows.map(function(a,i){
+        var photoIn = a.photoIn
+          ? '<button class="btn btn-ghost btn-icon" data-photo="in" data-id="'+a.id+'" title="Lihat bukti masuk">'+PH.icon('camera')+'</button>'
+          : (a.checkIn?'<span class="text-muted text-xs">—</span>':'-');
+        var photoOut = a.photoOut
+          ? '<button class="btn btn-ghost btn-icon" data-photo="out" data-id="'+a.id+'" title="Lihat bukti pulang">'+PH.icon('camera')+'</button>'
+          : (a.checkOut?'<span class="text-muted text-xs">—</span>':'-');
+        return '<tr>'+
+          '<td>'+(start+i+1)+'</td>'+
+          '<td><strong>'+a.nama+'</strong><div class="text-xs text-muted">'+a.nik+' · '+a.site+'</div></td>'+
+          '<td>'+PH.fmtTanggalSingkat(a.date)+'</td>'+
+          '<td style="font-variant-numeric:tabular-nums">'+PH.fmtWaktu(a.checkIn)+'</td>'+
+          '<td>'+photoIn+'</td>'+
+          '<td style="font-variant-numeric:tabular-nums">'+PH.fmtWaktu(a.checkOut)+'</td>'+
+          '<td>'+photoOut+'</td>'+
+          '<td>'+statusBadge(a.status)+'</td></tr>';
+      }).join('');
+
+      tbody.querySelectorAll('[data-photo]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var id = b.getAttribute('data-id');
+          var which = b.getAttribute('data-photo');
+          var rec = filtered.find(function(x){return x.id===id;});
+          var src = which==='in'?rec.photoIn:rec.photoOut;
+          var m = PH.modal(
+            '<h3>Bukti Absen '+(which==='in'?'Masuk':'Pulang')+'</h3>'+
+            '<p>'+rec.nama+' · '+PH.fmtTanggalSingkat(rec.date)+' · '+PH.fmtWaktu(which==='in'?rec.checkIn:rec.checkOut)+' WIB</p>'+
+            '<img class="photo" src="'+src+'" alt="Bukti foto">'+
+            '<div class="modal-actions"><button class="btn btn-primary" data-close>Tutup</button></div>'
+          );
+          m.el.querySelector('[data-close]').onclick = m.close;
+        });
+      });
+
+      var maxPage = Math.max(1, Math.ceil(filtered.length/PER_PAGE));
+      var pag = document.getElementById('pagination');
+      var html = '<button data-p="1" '+(page===1?'disabled':'')+'>'+PH.icon('chevrons-left')+'</button>'+
+        '<button data-p="'+(page-1)+'" '+(page===1?'disabled':'')+'>'+PH.icon('arrow-left')+'</button>';
+      for (var p=1;p<=maxPage;p++) html += '<button data-p="'+p+'" class="'+(p===page?'active':'')+'">'+p+'</button>';
+      html += '<button data-p="'+(page+1)+'" '+(page===maxPage?'disabled':'')+'>'+PH.icon('arrow-right')+'</button>'+
+        '<button data-p="'+maxPage+'" '+(page===maxPage?'disabled':'')+'>'+PH.icon('chevrons-right')+'</button>';
+      pag.innerHTML = html;
+      pag.querySelectorAll('button[data-p]').forEach(function(b){
+        b.addEventListener('click', function(){ page=parseInt(b.getAttribute('data-p'),10); render(); });
+      });
+      document.getElementById('info').textContent = 'Menampilkan '+(filtered.length?start+1:0)+'–'+Math.min(start+PER_PAGE, filtered.length)+' dari '+filtered.length+' catatan';
+    }
+
+    document.getElementById('btnCari').addEventListener('click', function(){ page=1; applyFilter(); });
+    document.getElementById('f-nama').addEventListener('keydown', function(e){ if(e.key==='Enter'){page=1;applyFilter();} });
+    document.getElementById('btnReset').addEventListener('click', function(){
+      document.getElementById('f-nama').value=''; document.getElementById('f-tanggal').value=''; document.getElementById('f-status').value=''; page=1; applyFilter();
+    });
+    document.getElementById('btnCsv').addEventListener('click', function(){
+      var rows = filtered.map(function(a,i){return [i+1, a.nik, a.nama, a.site, a.date, PH.fmtWaktu(a.checkIn), PH.fmtWaktu(a.checkOut), a.status];});
+      PH.exportCSV('rekapitulasi-absensi.csv', ['No','NIK','Nama','Lokasi','Tanggal','Jam Masuk','Jam Pulang','Status'], rows);
+      PH.toast('Rekapitulasi diekspor ke CSV.', 'success');
+    });
+
+    applyFilter();
+  </script>
+</body>
+</html>
