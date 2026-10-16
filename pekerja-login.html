@@ -5,101 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masuk Pekerja — Pantau Hadir</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3C/svg%3E">
+  <link rel="icon" href="assets/images/logo-pantau-hadir.jpg">
 </head>
-<body class="auth-body img-bg">
-  <main class="auth-main">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="logo-box"><img class="logo-img" src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir"></div>
-        <div class="brand">Pekerja Portal<small>PT. Jalan Baru</small></div>
-      </div>
-      <h1>Masuk Pekerja</h1>
-      <p class="auth-sub">Gunakan NIK dan kata sandi yang diberikan oleh admin proyek.</p>
+<body class="worker-login-body">
+  <div class="worker-login-wrap">
+    <a href="index.html" class="back-btn" aria-label="Kembali"><img src="assets/images/icons/undo-2.svg" alt="" width="22" height="22"></a>
 
-      <div class="demo-hint">
-        <b>Demo:</b> ID Perusahaan <b>PTJB01</b> · NIK <b>P0001</b> (sampai P0020) · Kata Sandi <b>123456</b>
-      </div>
-
-      <form id="loginForm" novalidate>
-        <div class="field" id="f-company">
-          <label for="id-perusahaan">ID Perusahaan</label>
-          <div class="input-wrap">
-            <span id="ico-building"></span>
-            <input class="input" type="text" id="id-perusahaan" name="id-perusahaan" placeholder="cth: PTJB01" required autofocus autocomplete="organization">
-          </div>
-          <p class="error-msg">ID Perusahaan wajib diisi.</p>
-        </div>
-        <div class="field" id="f-nik">
-          <label for="nik">NIK / ID Pekerja</label>
-          <div class="input-wrap">
-            <span id="ico-id"></span>
-            <input class="input" type="text" id="nik" name="nik" placeholder="cth: P0001" required autocomplete="username" inputmode="text">
-          </div>
-          <p class="error-msg">NIK wajib diisi.</p>
-        </div>
-        <div class="field" id="f-pass">
-          <label for="kata-sandi">Kata Sandi</label>
-          <div class="input-wrap">
-            <span id="ico-lock"></span>
-            <input class="input" type="password" id="kata-sandi" name="kata-sandi" placeholder="Masukkan kata sandi" required autocomplete="current-password">
-            <button type="button" class="toggle-pass" data-toggle-pass="#kata-sandi" aria-label="Tampilkan/sembunyikan kata sandi" id="togglePass"></button>
-          </div>
-          <p class="error-msg">Kata sandi wajib diisi.</p>
-        </div>
-        <button type="submit" class="btn btn-accent btn-block btn-lg" id="submitBtn">
-          <span id="ico-login"></span> MASUK
-        </button>
-      </form>
-
-      <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
-      <a href="index.html" class="btn btn-ghost btn-block"><span id="ico-home"></span> Kembali ke Beranda</a>
+    <div style="text-align:center;margin:8px 0 26px">
+      <img src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir" style="height:110px;width:auto;margin:0 auto">
     </div>
-  </main>
-  <footer class="auth-foot">&copy; 2026 Pantau Hadir App — Sistem Absensi Pekerja Proyek</footer>
+
+    <h1 class="masuk-heading">MASUK</h1>
+
+    <form id="loginForm" novalidate>
+      <div class="field2" id="f-nik">
+        <label for="nik">NIK</label>
+        <input class="input2" type="text" id="nik" name="nik" placeholder="Masukkan NIK" required autocomplete="username" autofocus>
+        <p class="error-msg">NIK wajib diisi.</p>
+      </div>
+      <div class="field2" id="f-pass">
+        <label for="kata-sandi">Kata Sandi</label>
+        <div style="position:relative">
+          <input class="input2" type="password" id="kata-sandi" name="kata-sandi" placeholder="Masukkan Kata Sandi" required autocomplete="current-password">
+          <button type="button" class="toggle-pass2" id="togglePass" aria-label="Tampilkan/sembunyikan kata sandi"><img src="assets/images/icons/eye-off.svg" width="20" height="20" alt=""></button>
+        </div>
+        <p class="error-msg">Kata sandi wajib diisi.</p>
+      </div>
+      <button type="submit" class="btn-masuk" id="submitBtn">
+        <img src="assets/images/icons/log-in.svg" width="20" height="20" alt=""> Masuk
+      </button>
+    </form>
+
+    <div class="demo-hint" style="margin-top:18px">
+      <b>Demo:</b> NIK <b>P0001</b> (s.d. P0020) · Kata Sandi <b>123456</b>
+    </div>
+  </div>
+
+  <div class="construction-foot"></div>
 
   <script src="assets/js/app.js"></script>
   <script>
-    document.getElementById('ico-building').innerHTML = PH.icon('building');
-    document.getElementById('ico-id').innerHTML = PH.icon('id-card');
-    document.getElementById('ico-lock').innerHTML = PH.icon('lock');
-    document.getElementById('ico-login').innerHTML = PH.icon('logout');
-    document.getElementById('ico-home').innerHTML = PH.icon('home');
-    document.getElementById('togglePass').innerHTML = PH.icon('eye');
-
     if (PH.getSession() && PH.getSession().role === 'worker') location.replace('pekerja-dashboard.html');
+    document.getElementById('togglePass').addEventListener('click', function(){
+      var inp = document.getElementById('kata-sandi');
+      var show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      this.querySelector('img').src = 'assets/images/icons/' + (show ? 'eye.svg' : 'eye-off.svg');
+    });
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e){
       e.preventDefault();
-      var company = document.getElementById('id-perusahaan').value.trim();
       var nik = document.getElementById('nik').value.trim().toUpperCase();
       var pass = document.getElementById('kata-sandi').value;
       var ok = true;
-      [['f-company', company], ['f-nik', nik], ['f-pass', pass]].forEach(function (x) {
+      [['f-nik', nik], ['f-pass', pass]].forEach(function(x){
         document.getElementById(x[0]).classList.toggle('invalid', !x[1]);
         if (!x[1]) ok = false;
       });
-      if (!ok) { PH.toast('Lengkapi semua field.', 'error'); return; }
-
+      if (!ok){ PH.toast('Lengkapi NIK dan Kata Sandi.', 'error'); return; }
       var btn = document.getElementById('submitBtn');
       btn.disabled = true; btn.textContent = 'Memverifikasi…';
-      setTimeout(function () {
-        var comp = PH.getCompany();
-        var worker = PH.getWorkers().find(function (w) { return w.nik.toUpperCase() === nik; });
-        if (company.toUpperCase() !== comp.id.toUpperCase()) {
-          resetBtn(btn); PH.toast('ID Perusahaan tidak terdaftar.', 'error'); return;
-        }
-        if (!worker) { resetBtn(btn); PH.toast('NIK tidak ditemukan. Hubungi admin.', 'error'); return; }
-        if (worker.password !== pass) { resetBtn(btn); PH.toast('Kata sandi salah.', 'error'); return; }
-        PH.setSession({ role: 'worker', workerId: worker.id, nik: worker.nik, nama: worker.nama, site: worker.site, loginAt: new Date().toISOString() });
+      setTimeout(function(){
+        var worker = PH.getWorkers().find(function(w){ return w.nik.toUpperCase() === nik; });
+        if (!worker){ reset(btn); PH.toast('NIK tidak ditemukan. Hubungi admin.', 'error'); return; }
+        if (worker.password !== pass){ reset(btn); PH.toast('Kata sandi salah.', 'error'); return; }
+        PH.setSession({ role:'worker', workerId:worker.id, nik:worker.nik, nama:worker.nama, site:worker.site, loginAt:new Date().toISOString() });
         location.href = 'pekerja-dashboard.html?ok=' + encodeURIComponent('Selamat datang, ' + worker.nama.split(' ')[0] + '!');
       }, 500);
-
-      function resetBtn(b) {
-        b.disabled = false;
-        b.innerHTML = '<span></span> MASUK';
-        b.querySelector('span').innerHTML = PH.icon('logout');
-      }
+      function reset(b){ b.disabled = false; b.innerHTML = '<img src="assets/images/icons/log-in.svg" width="20" height="20" alt=""> Masuk'; }
     });
   </script>
 </body>

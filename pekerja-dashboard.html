@@ -11,7 +11,7 @@
   <div class="worker-wrap">
     <!-- ORANGE TOP BAR -->
     <div class="orange-topbar">
-      <a href="#" class="keluar-btn" data-logout><span id="i-back"></span> Keluar</a>
+      <a href="#" class="keluar-btn" data-logout><img src="assets/images/icons/log-out.svg" width="18" height="18" alt=""> Keluar</a>
     </div>
 
     <!-- IDENTITAS -->
@@ -24,30 +24,28 @@
     </div>
 
     <h1 class="halo" id="helloName">HALO!</h1>
-    <p class="status-line">STATUS: <b id="statusText">MEMERIKSA LOKASI…</b></p>
+    <p class="status-line">STATUS: <span class="badge badge-success" id="statusText" style="font-size:11px">MEMERIKSA…</span></p>
 
-    <!-- FACE SCAN CAMERA -->
-    <div class="face-wrap" id="faceWrap">
-      <video id="video" autoplay playsinline muted style="display:none"></video>
+    <!-- KAMERA (kotak hitam sesuai Figma) -->
+    <div class="cam-figma" id="camBox">
+      <video id="video" autoplay playsinline muted style="display:none;width:100%;height:100%;object-fit:cover"></video>
       <canvas id="canvas" style="display:none"></canvas>
-      <div class="face-placeholder" id="facePlaceholder">
-        <span id="i-cam"></span>
-        <p id="camHint">Aktifkan kamera untuk verifikasi wajah.<br><small>Memerlukan izin kamera (HTTPS).</small></p>
-      </div>
-      <div class="face-ring"></div>
-      <div class="face-scan"></div>
+      <button type="button" class="cam-activate" id="btnActivate">
+        TEKAN UNTUK<br>AKTIFKAN<br>KAMERA DEPAN
+      </button>
+      <div class="cam-oval" id="camOval" style="display:none"></div>
+      <div class="cam-scan-h" id="camScan" style="display:none"></div>
     </div>
 
-    <div style="text-align:center;margin-top:14px">
-      <button class="btn btn-ghost" id="btnCam" style="padding:9px 16px;font-size:13px"><span id="i-cam2"></span> <span id="camBtnText">Aktifkan Kamera</span></button>
-    </div>
+    <!-- ABSEN (nonaktif sampai kamera aktif) -->
+    <button class="btn-absen" id="btnAbsen" disabled>
+      <img src="assets/images/icons/scan-face.svg" width="22" height="22" alt=""> <span id="absenText">ABSEN</span>
+    </button>
+    <p class="text-center text-xs text-muted mt-8" id="absenHint">Aktifkan kamera terlebih dahulu untuk dapat absen.</p>
+
     <div class="text-center text-sm text-muted mt-8 flex gap-8" id="gpsLine" style="display:none;justify-content:center">
-      <span id="i-gps"></span> <span id="gpsText">Mengambil lokasi…</span>
+      <img src="assets/images/icons/map-pin-check.svg" width="16" height="16" alt=""> <span id="gpsText">Mengambil lokasi…</span>
     </div>
-
-    <!-- ABSEN BUTTON -->
-    <button class="btn-absen" id="btnAbsen"><span id="i-absen"></span> <span id="absenText">ABSEN MASUK</span></button>
-    <p class="text-center text-xs text-muted mt-8" id="absenHint">Tekan tombol untuk mencatat kehadiran Anda hari ini.</p>
 
     <!-- SERVER TIME FOOTER -->
     <div class="server-footer">
@@ -59,80 +57,71 @@
   <script src="assets/js/app.js"></script>
   <script>
     var sess = PH.requireRole('worker');
-    document.getElementById('i-back').innerHTML = PH.icon('arrow-left');
-    document.getElementById('i-cam').innerHTML = PH.icon('scan-face');
-    document.getElementById('i-cam2').innerHTML = PH.icon('camera');
-    document.getElementById('i-gps').innerHTML = PH.icon('map-pin');
-    document.getElementById('i-absen').innerHTML = PH.icon('scan-face');
     document.getElementById('companyName').textContent = PH.getCompany().name.toUpperCase();
     document.getElementById('siteName').textContent = sess.site.toUpperCase();
-    document.getElementById('helloName').textContent = 'HALO, ' + sess.nama.toUpperCase().split(' ')[0] + '!';
+    document.getElementById('helloName').textContent = 'HALO, ' + sess.nama.toUpperCase().split(' ')[0] + '!!';
     PH.startClock(document.getElementById('clockDate'), document.getElementById('clockTime'));
 
     var stream = null, lat = null, lng = null, cameraOn = false, insideGeofence = true;
     var video = document.getElementById('video');
     var canvas = document.getElementById('canvas');
+    var btnActivate = document.getElementById('btnActivate');
+    var btnAbsen = document.getElementById('btnAbsen');
 
     function refreshStatus(){
       var rec = PH.todayRecord(sess.workerId);
-      var btn = document.getElementById('btnAbsen');
       var txt = document.getElementById('absenText');
       var hint = document.getElementById('absenHint');
       var st = document.getElementById('statusText');
       st.textContent = insideGeofence ? 'DI DALAM AREA PROYEK' : 'DI LUAR AREA PROYEK';
-      st.style.color = insideGeofence ? 'var(--success)' : 'var(--danger)';
+      st.className = 'badge badge-' + (insideGeofence ? 'success' : 'danger');
       if (!rec) {
         txt.textContent = 'ABSEN MASUK';
-        hint.textContent = 'Tekan tombol untuk mencatat kehadiran Anda hari ini.';
-        btn.disabled = !insideGeofence;
+        hint.textContent = cameraOn ? 'Tekan tombol untuk mencatat kehadiran Anda hari ini.' : 'Aktifkan kamera terlebih dahulu untuk dapat absen.';
       } else if (!rec.checkOut) {
         txt.textContent = 'ABSEN PULANG';
         hint.textContent = 'Anda sudah absen masuk pukul ' + PH.fmtWaktu(rec.checkIn) + '. Tekan tombol saat pulang.';
-        btn.disabled = false;
       } else {
         txt.textContent = 'ABSEN SELESAI HARI INI';
         hint.textContent = 'Anda sudah menyelesaikan absensi hari ini. Sampai jumpa besok!';
-        btn.disabled = true;
       }
+      btnAbsen.disabled = !cameraOn || (!!rec && !!rec.checkOut) || !insideGeofence;
     }
 
-    document.getElementById('btnCam').addEventListener('click', function(){
-      if (cameraOn) { stopCam(); return; }
+    function activateCam(){
+      if (cameraOn) return;
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        PH.toast('Browser tidak mendukung kamera. Absen tetap bisa dilakukan.', 'error'); return;
+        PH.toast('Browser tidak mendukung kamera.', 'error'); return;
       }
-      navigator.mediaDevices.getUserMedia({ video: { facingMode:'user', width:{ideal:640}, height:{ideal:640} }, audio:false })
+      navigator.mediaDevices.getUserMedia({ video: { facingMode:'user', width:{ideal:640}, height:{ideal:480} }, audio:false })
         .then(function(s){
           stream = s; video.srcObject = s; video.style.display='block';
-          document.getElementById('facePlaceholder').style.display='none';
-          document.getElementById('faceWrap').classList.add('active');
-          document.getElementById('camBtnText').textContent = 'Matikan Kamera';
+          btnActivate.style.display = 'none';
+          document.getElementById('camOval').style.display = 'block';
+          document.getElementById('camScan').style.display = 'block';
           cameraOn = true;
+          PH.toast('Kamera aktif. Silakan absen.', 'success');
+          refreshStatus();
         })
         .catch(function(err){
-          document.getElementById('camHint').innerHTML = 'Tidak dapat mengakses kamera.<br><small>Absen tetap dapat dilakukan tanpa foto.</small>';
-          PH.toast('Akses kamera ditolak. Absen tetap bisa dilakukan.', 'error');
+          PH.toast('Akses kamera ditolak. Izinkan kamera untuk absen.', 'error');
         });
-    });
-    function stopCam(){
-      if (stream){ stream.getTracks().forEach(function(t){t.stop();}); stream=null; }
-      video.style.display='none';
-      document.getElementById('facePlaceholder').style.display='flex';
-      document.getElementById('faceWrap').classList.remove('active');
-      document.getElementById('camBtnText').textContent = 'Aktifkan Kamera';
-      cameraOn = false;
     }
+    btnActivate.addEventListener('click', activateCam);
+    document.getElementById('camBox').addEventListener('click', function(e){
+      if (!cameraOn && e.target === btnActivate) return; // handled
+      if (!cameraOn) activateCam();
+    });
+
     function capturePhoto(){
       if (!cameraOn) return null;
       try {
-        var s = 240;
-        canvas.width = s; canvas.height = s;
+        var w = 240, h = 320;
+        canvas.width = w; canvas.height = h;
         var ctx = canvas.getContext('2d');
-        var vw = video.videoWidth, vh = video.videoHeight;
-        if (vw && vh){
-          var scale = Math.max(s/vw, s/vh), dw = vw*scale, dh = vh*scale;
-          ctx.drawImage(video, (s-dw)/2, (s-dh)/2, dw, dh);
-        } else { ctx.drawImage(video, 0, 0, s, s); }
+        var vw = video.videoWidth || 640, vh = video.videoHeight || 480;
+        var scale = Math.max(w/vw, h/vh), dw = vw*scale, dh = vh*scale;
+        ctx.drawImage(video, (w-dw)/2, (h-dh)/2, dw, dh);
         return canvas.toDataURL('image/jpeg', 0.6);
       } catch(e){ return null; }
     }
@@ -146,25 +135,25 @@
         refreshStatus();
       }, function(){
         insideGeofence = true;
-        document.getElementById('gpsText').textContent = 'Lokasi tidak dapat dibaca (izin ditolak).';
+        document.getElementById('gpsText').textContent = 'Lokasi tidak dapat dibaca.';
         refreshStatus();
       }, { timeout: 8000 });
     }
     refreshStatus();
 
-    document.getElementById('btnAbsen').addEventListener('click', function(){
-      var btn = document.getElementById('btnAbsen');
-      btn.disabled = true;
+    btnAbsen.addEventListener('click', function(){
+      if (!cameraOn) return;
+      btnAbsen.disabled = true;
       var rec = PH.todayRecord(sess.workerId);
       var photo = capturePhoto();
       setTimeout(function(){
         if (!rec) {
           var r = PH.checkIn({id:sess.workerId, nik:sess.nik, nama:sess.nama, site:sess.site}, photo, lat, lng);
-          stopCam();
+          if (stream){ stream.getTracks().forEach(function(t){t.stop();}); }
           location.href = 'absen-sukses.html?type=masuk&id=' + r.id;
         } else if (!rec.checkOut) {
           var r2 = PH.checkOut(rec.id, photo);
-          stopCam();
+          if (stream){ stream.getTracks().forEach(function(t){t.stop();}); }
           location.href = 'absen-sukses.html?type=pulang&id=' + r2.id;
         }
       }, 600);
