@@ -11,8 +11,7 @@
   <div class="admin-layout">
     <aside class="sidebar">
       <div class="brand-area">
-        <div class="logo-mark" id="logo"></div>
-        <div class="brand">Pantau Hadir<small>Admin</small></div>
+        <div class="logo-box"><img class="logo-img" src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir"></div>
       </div>
       <nav>
         <a href="admin-dashboard.html"><span id="i-dash"></span> Dashboard</a>
@@ -100,7 +99,6 @@
   <script src="assets/js/app.js"></script>
   <script>
     PH.requireRole('admin');
-    document.getElementById('logo').innerHTML = PH.icon('hard-hat');
     document.getElementById('i-dash').innerHTML = PH.icon('layout');
     document.getElementById('i-rekap').innerHTML = PH.icon('clipboard');
     document.getElementById('i-pekerja').innerHTML = PH.icon('users');

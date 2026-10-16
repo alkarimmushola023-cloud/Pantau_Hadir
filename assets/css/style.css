@@ -10,18 +10,22 @@
   --ink-2:#334155;
   --muted:#64748b;
   --line:#e2e8f0;
-  --primary:#2563eb;
-  --primary-dark:#1d4ed8;
+  --primary:#1e3a8a;          /* navy blue (Figma) */
+  --primary-dark:#172554;
   --primary-soft:#dbeafe;
-  --accent:#f59e0b;
-  --accent-soft:#fef3c7;
+  --primary-bright:#2563eb;
+  --accent:#f97316;           /* orange header bar (Figma) */
+  --accent-dark:#ea580c;
+  --accent-soft:#ffedd5;
   --success:#16a34a;
   --success-soft:#dcfce7;
   --danger:#dc2626;
   --danger-soft:#fee2e2;
   --warning:#d97706;
   --info:#0891b2;
-  --sidebar:#0f172a;
+  --sky-soft:#eff6ff;         /* light blue footer / table */
+  --sky-mid:#bfdbfe;
+  --sidebar:#172554;          /* deep navy sidebar */
   --sidebar-ink:#cbd5e1;
   --radius:14px;
   --radius-sm:10px;
@@ -92,7 +96,7 @@ svg{display:inline-block;vertical-align:middle;flex:none}
 .field label{display:block;font-weight:600;font-size:13.5px;color:var(--ink-2);margin-bottom:6px}
 .input-wrap{position:relative;display:flex;align-items:center}
 .input-wrap svg{position:absolute;left:13px;width:18px;height:18px;color:var(--muted);pointer-events:none}
-.input-wrap input,.input-wrap select{padding-left:40px}
+.input-wrap input,.input-wrap select{padding-left:46px}
 .input,select,textarea{
   width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
   background:var(--surface);color:var(--ink);transition:.15s ease;outline:none;
@@ -382,3 +386,101 @@ td .btn{padding:6px 10px;font-size:12.5px}
   .page-head h1{font-size:20px}
   .stat-card .num{font-size:26px}
 }
+
+/* ============================================================
+   FIGMA DESIGN — komponen khusus sesuai prototype
+   ============================================================ */
+/* Logo image (full horizontal logo with white bg) */
+.logo-img{display:block;max-width:100%;height:auto}
+.logo-box{background:#fff;border-radius:12px;padding:8px 12px;display:inline-flex;align-items:center;box-shadow:var(--shadow-sm)}
+.logo-box img{height:34px;width:auto}
+.sidebar .logo-box{padding:6px 10px;border-radius:10px}
+.sidebar .logo-box img{height:30px}
+
+/* Orange top bar (halaman pekerja mobile) */
+.orange-topbar{
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  padding:14px 18px;border-radius:0 0 18px 18px;
+  display:flex;align-items:center;box-shadow:0 4px 14px rgba(249,115,22,.3);
+}
+.keluar-btn{
+  display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--ink);
+  font-weight:700;font-size:13.5px;padding:8px 14px;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);transition:.15s;
+}
+.keluar-btn:hover{transform:translateY(-1px);text-decoration:none}
+.keluar-btn svg{width:16px;height:16px}
+
+/* Worker identity header (logo + PT + site) */
+.w-identity{display:flex;align-items:center;gap:12px;padding:16px 4px 8px}
+.w-identity .logo-box{padding:6px 8px;border-radius:10px;flex:none}
+.w-identity .logo-box img{height:42px}
+.w-identity .pt{font-weight:800;font-size:17px;color:var(--primary);letter-spacing:.01em;line-height:1.2}
+.w-identity .site{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+
+/* Halo + status */
+.halo{font-size:24px;font-weight:800;color:var(--primary);letter-spacing:.02em;margin:10px 4px 4px}
+.status-line{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin:0 4px 14px;color:var(--muted)}
+.status-line b{color:var(--success)}
+
+/* Face scan circle (green ring over camera) */
+.face-wrap{position:relative;width:100%;aspect-ratio:1/1;max-width:300px;margin:0 auto;border-radius:50%;overflow:hidden;background:#0f172a;box-shadow:0 0 0 5px var(--success),0 10px 30px rgba(22,163,74,.35)}
+.face-wrap video,.face-wrap canvas{width:100%;height:100%;object-fit:cover;display:block}
+.face-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;text-align:center;padding:20px}
+.face-placeholder svg{width:56px;height:56px;margin-bottom:10px;opacity:.7}
+.face-placeholder p{font-size:13px;line-height:1.5}
+.face-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(34,197,94,.9);box-shadow:inset 0 0 40px rgba(34,197,94,.25);pointer-events:none}
+.face-scan{position:absolute;left:12%;right:12%;height:3px;background:linear-gradient(90deg,transparent,#4ade80,transparent);border-radius:3px;animation:facescan 2.4s ease-in-out infinite;display:none}
+@keyframes facescan{0%,100%{top:14%}50%{top:84%}}
+.face-wrap.active .face-scan{display:block}
+
+/* ABSEN button (navy, big) */
+.btn-absen{
+  background:var(--primary);color:#fff;font-weight:800;font-size:17px;letter-spacing:.08em;
+  padding:16px;border-radius:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 22px rgba(30,58,138,.4);transition:.18s;margin-top:18px;
+}
+.btn-absen:hover{background:var(--primary-dark);transform:translateY(-2px)}
+.btn-absen:disabled{background:#94a3b8;box-shadow:none;transform:none}
+.btn-absen svg{width:22px;height:22px}
+
+/* Server time footer (light blue band) */
+.server-footer{
+  background:var(--sky-soft);border-top:3px solid var(--sky-mid);border-radius:16px 16px 0 0;
+  padding:14px 18px;margin:22px -18px -40px;text-align:center;
+}
+.server-footer .lbl{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3b82f6}
+.server-footer .val{font-size:14px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;margin-top:2px}
+
+/* Riwayat absensi table (blue header, light rows) */
+.riwayat{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);margin-top:14px;font-size:13px}
+.riwayat thead th{background:var(--primary);color:#fff;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;padding:10px 12px;text-align:left;font-weight:700}
+.riwayat tbody td{padding:9px 12px;border-bottom:1px solid var(--sky-mid);background:var(--sky-soft);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.riwayat tbody tr:nth-child(even) td{background:#fff}
+.riwayat tbody tr:last-child td{border-bottom:none}
+.pager{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.pager button{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line);color:var(--primary);display:flex;align-items:center;justify-content:center;transition:.15s}
+.pager button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.pager button svg{width:16px;height:16px}
+
+/* Auth pages with construction background image */
+.auth-body.img-bg{
+  background:
+    linear-gradient(180deg,rgba(15,23,42,.82) 0%,rgba(30,58,138,.78) 50%,rgba(15,23,42,.88) 100%),
+    url('../images/images-konstruksi-biru.jpg') center/cover no-repeat fixed;
+}
+.auth-body.img-bg .auth-foot{color:#cbd5e1}
+
+/* Success green ring */
+.success-green{
+  width:110px;height:110px;border-radius:50%;background:var(--success);
+  display:flex;align-items:center;justify-content:center;margin:10px auto 16px;
+  box-shadow:0 10px 30px rgba(22,163,74,.4);animation:pop .5s cubic-bezier(.2,.9,.3,1.3);position:relative;
+}
+.success-green::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:3px solid var(--success);animation:pulse 1.8s ease-out infinite}
+.success-green svg{width:56px;height:56px;color:#fff;stroke-width:3}
+
+/* Sidebar active orange accent */
+.sidebar nav a.active{background:var(--accent);box-shadow:0 6px 16px rgba(249,115,22,.45)}
+.stat-card.amber::after{background:var(--accent)}
+.stat-card.amber .stat-ico{background:var(--accent-soft);color:var(--accent-dark)}

@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3C/svg%3E">
 </head>
-<body class="auth-body">
+<body class="auth-body img-bg">
   <main class="auth-main">
     <div class="auth-card">
       <div class="auth-logo">
-        <div class="logo-mark" id="logo"></div>
-        <div class="brand">Pantau Hadir<small>Admin Portal</small></div>
+        <div class="logo-box"><img class="logo-img" src="assets/images/logo-pantau-hadir.jpg" alt="Pantau Hadir"></div>
+        <div class="brand">Admin Portal<small>PT. Jalan Baru</small></div>
       </div>
       <h1>Masuk ke Akun Admin</h1>
       <p class="auth-sub">Masukkan kredensial untuk mengakses dashboard administrator.</p>
@@ -60,7 +60,6 @@
 
   <script src="assets/js/app.js"></script>
   <script>
-    document.getElementById('logo').innerHTML = PH.icon('hard-hat');
     document.getElementById('ico-building').innerHTML = PH.icon('building');
     document.getElementById('ico-user').innerHTML = PH.icon('user');
     document.getElementById('ico-lock').innerHTML = PH.icon('lock');
