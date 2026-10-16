@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absen Berhasil — Pantau Hadir</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2'%3E%3Cpath d='M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z'/%3E%3Cpath d='M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5'/%3E%3C/svg%3E">
+</head>
+<body class="worker-body">
+  <div class="worker-wrap">
+    <div class="w-topbar">
+      <div class="w-logo">
+        <div class="logo-mark" id="logo"></div>
+        <span>Pantau Hadir</span>
+      </div>
+      <a href="#" class="w-logout" data-logout><span id="i-out"></span> Keluar</a>
+    </div>
+
+    <div class="success-hero">
+      <div class="success-ring" id="i-check"></div>
+      <h1 id="title">ABSEN ANDA TERKIRIM!</h1>
+      <p id="sub">Kehadiran Anda berhasil dicatat oleh sistem.</p>
+    </div>
+
+    <div class="card card-pad" style="margin-top:8px">
+      <div class="detail-grid" id="detailGrid"></div>
+      <div id="photoWrap" style="display:none">
+        <div class="text-sm text-muted mb-8">Bukti Foto:</div>
+        <img id="photo" class="photo" style="width:100%;border-radius:12px;border:1px solid var(--line)" alt="Bukti absen">
+      </div>
+    </div>
+
+    <div class="card card-pad mt-16">
+      <h3 style="font-size:15px;margin-bottom:12px">Riwayat Absensi Terakhir</h3>
+      <div class="table-wrap" style="box-shadow:none">
+        <table style="min-width:0">
+          <thead><tr><th>Tanggal</th><th>Masuk</th><th>Pulang</th><th>Status</th></tr></thead>
+          <tbody id="histBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <a href="pekerja-dashboard.html" class="btn btn-primary btn-block btn-lg mt-24"><span id="i-back"></span> Kembali ke Dashboard</a>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    var sess = PH.requireRole('worker');
+    document.getElementById('logo').innerHTML = PH.icon('hard-hat');
+    document.getElementById('i-out').innerHTML = PH.icon('logout');
+    document.getElementById('i-check').innerHTML = PH.icon('check');
+    document.getElementById('i-back').innerHTML = PH.icon('arrow-left');
+
+    var type = PH.param('type') || 'masuk';
+    var id = PH.param('id');
+    var rec = id ? PH.getAttendance().find(function(a){return a.id===id;}) : null;
+    if (!rec) rec = PH.workerHistory(sess.workerId, 1)[0];
+
+    document.getElementById('title').textContent = type==='pulang' ? 'ABSEN PULANG TERCATAT!' : 'ABSEN MASUK TERCATAT!';
+    var isLate = rec && rec.status==='Terlambat';
+
+    var waktu = type==='pulang' ? rec.checkOut : rec.checkIn;
+    var photo = type==='pulang' ? rec.photoOut : rec.photoIn;
+
+    var items = [
+      {k:'Nama', v: sess.nama},
+      {k:'NIK', v: sess.nik},
+      {k:'Lokasi', v: sess.site},
+      {k:'Tanggal', v: rec ? PH.fmtTanggalSingkat(rec.date) : '-'},
+      {k:'Waktu Absen', v: PH.fmtWaktu(waktu) + ' WIB'},
+      {k:'Status', v: rec ? rec.status : '-', badge: isLate ? 'warning' : 'success'}
+    ];
+    document.getElementById('detailGrid').innerHTML = items.map(function(it){
+      var val = it.badge ? '<span class="badge badge-'+it.badge+'">'+it.v+'</span>' : it.v;
+      return '<div class="detail-item"><div class="k">'+it.k+'</div><div class="v">'+val+'</div></div>';
+    }).join('');
+
+    if (photo) {
+      document.getElementById('photoWrap').style.display='block';
+      document.getElementById('photo').src = photo;
+    }
+
+    var hist = PH.workerHistory(sess.workerId, 6);
+    document.getElementById('histBody').innerHTML = hist.length ? hist.map(function(h){
+      return '<tr><td>'+PH.fmtTanggalSingkat(h.date)+'</td><td>'+PH.fmtWaktu(h.checkIn)+'</td><td>'+PH.fmtWaktu(h.checkOut)+'</td>'+
+        '<td>'+(h.status==='Hadir'?'<span class="badge badge-success">Hadir</span>':'<span class="badge badge-warning">Terlambat</span>')+'</td></tr>';
+    }).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Belum ada riwayat.</td></tr>';
+  </script>
+</body>
+</html>
