@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rekapitulasi Absensi - Pantau Hadir</title>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside>
+        <div>
+            <img src="./assets/images/logo-pantau-hadir.svg" width="150" alt="Pantau Hadir - Sistem Absensi Pekerja Proyek">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="rekapitulasi-absensi.html">Rekapitulasi Absensi</a></li>
+                <li><a href="data-pekerja.html">Data Pekerja</a></li>
+            </ul>
+        </nav>
+
+        <footer>
+            <a href="index.html">
+                <img src="./assets/images/icons/log-out.svg" width="10" alt="">
+                Keluar
+            </a>
+        </footer>
+
+    </aside>
+
+    <main>
+        <!-- HEADER -->
+        <header>
+            <h2>PT. Jalan Baru</h2>
+            <div>
+                <span>Admin</span>
+                <img src="./assets/images/icons/users.svg" width="10" alt="">
+            </div>
+        </header>
+        
+        <section>
+            <h1>Rekapitulasi Absensi Pekerja</h1>
+            <p>Halaman untuk melihat data kehadiran pekerja proyek.</p>
+        </section>
+
+        <section>
+            <h2>Filter Data Absensi</h2>
+
+            <form action="#" method="get">
+
+                <p>
+                    <label for="nama">Nama Pekerja:</label>
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        placeholder="Masukkan nama pekerja">
+                </p>
+
+                <p>
+                    <label for="tanggal">Tanggal Absensi:</label>
+                    <input
+                        type="date"
+                        id="tanggal"
+                        name="tanggal">
+                </p>
+
+                <p>
+                    <label for="status">Status Kehadiran:</label>
+                    <select id="status" name="status">
+                        <option value="">Semua Status</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Terlambat">Terlambat</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Alpha">Alpha</option>
+                    </select>
+                </p>
+
+                <button type="submit">Cari Data</button>
+                <button type="reset">Reset</button>
+
+            </form>
+        </section>
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Tanggal</th>
+                    <th scope="col">Jam Masuk</th>
+                    <th scope="col">Bukti Masuk</th>
+                    <th scope="col">Jam Pulang</th>
+                    <th scope="col">Bukti Pulang</th>
+                    <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>Bambang Cahyadi</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:31:20+07:00">07:31:20</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:31:29+07:00">16:31:29</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">2</th>
+                    <td>Ahmad Supriyadi</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:15:04+07:00">07:15:04</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:05:12+07:00">16:05:12</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">3</th>
+                    <td>Dedi Rahmadi</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:28:45+07:00">07:28:45</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:15:50+07:00">16:15:50</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">4</th>
+                    <td>Budi Santoso</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:42:10+07:00">07:42:10</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:45:01+07:00">16:45:01</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">5</th>
+                    <td>Suryo Nugroho</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T08:05:33+07:00">08:05:33</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T17:02:18+07:00">17:02:18</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Terlambat</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">6</th>
+                    <td>Eko Prasetyo</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:20:11+07:00">07:20:11</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:10:40+07:00">16:10:40</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">7</th>
+                    <td>Reza Kurniawan</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>Absen</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">8</th>
+                    <td>Hendra Wijaya</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:35:50+07:00">07:35:50</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:35:10+07:00">16:35:10</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">9</th>
+                    <td>Muhammad Agung</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:18:22+07:00">07:18:22</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:08:44+07:00">16:08:44</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">10</th>
+                    <td>Rizky Ramadhan</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>Absen</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">11</th>
+                    <td>Agus Setiawan</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:25:14+07:00">07:25:14</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:20:05+07:00">16:20:05</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">12</th>
+                    <td>Fajar Hidayat</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:11:40+07:00">07:11:40</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:02:19+07:00">16:02:19</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">13</th>
+                    <td>Gilang Gemilang</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T08:12:05+07:00">08:12:05</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T17:10:42+07:00">17:10:42</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Terlambat</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">14</th>
+                    <td>Hadi Pratama</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:30:00+07:00">07:30:00</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:30:15+07:00">16:30:15</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">15</th>
+                    <td>Indra Lesmana</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:40:18+07:00">07:40:18</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:40:55+07:00">16:40:55</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">16</th>
+                    <td>Joko Susilo</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:22:31+07:00">07:22:31</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:12:08+07:00">16:12:08</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">17</th>
+                    <td>Kiki Hermawan</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>Absen</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">18</th>
+                    <td>Lukman Hakim</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:29:10+07:00">07:29:10</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:25:30+07:00">16:25:30</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">19</th>
+                    <td>Mulyadi</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:14:52+07:00">07:14:52</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:01:45+07:00">16:01:45</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">20</th>
+                    <td>Novan Saputra</td>
+                    <td><time datetime="2026-09-25">25 Sep 2026</time></td>
+                    <td><time datetime="2026-09-25T07:38:04+07:00">07:38:04</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td><time datetime="2026-09-25T16:38:12+07:00">16:38:12</time></td>
+                    <td><a href="#">Foto</a></td>
+                    <td>Hadir</td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Navigasi halaman">
+                <button type="button" aria-label="Halaman pertama">
+                    <img src="./assets/images/icons/arrow-left-to-line.svg" width="10" alt="Halaman pertama">
+                </button>
+
+                <button type="button" aria-label="Halaman sebelumnya">
+                    <img src="./assets/images/icons/arrow-left.svg" width="10" alt="Sebelumnya">
+                </button>
+
+                <button type="button">1</button>
+                <button type="button">2</button>
+                <button type="button">3</button>
+
+                <button type="button" aria-label="Halaman berikutnya">
+                    <img src="./assets/images/icons/arrow-right.svg" width="10" alt="Berikutnya">
+                </button>
+
+                <button type="button" aria-label="Halaman terakhir">
+                    <img src="./assets/images/icons/arrow-right-to-line.svg" width="10" alt="Halaman terakhir">
+                </button>
+            </nav>
+        </div>
+
+        <section>
+            <h3>Ekspor Data Absensi</h3>
+
+            <p>
+                <button type="button">Unduh Excel</button>
+                <button type="button">Unduh PDF</button>
+                <button type="button" onclick="window.print()">
+                    Cetak Rekapitulasi
+                </button>
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Pantau Hadir. Hak cipta dilindungi.</p>
+    </footer>
+
+</body>
+</html>

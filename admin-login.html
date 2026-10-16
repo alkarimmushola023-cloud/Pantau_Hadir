@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk - Sistem Absensi Pekerja Proyek</title>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <img src="./assets/images/logo-pantau-hadir.svg" width="200" alt="Logo Hadir">
+    <h2>Sistem Absensi Pekerja Proyek</h2>
+  </header>
+
+  <!-- Konten Utama -->
+  <main>
+    <section>
+      <h1>Masuk ke Akun Anda</h1>
+      <p>Masukkan NIK dan password Anda untuk mengakses sistem</p>
+
+      <form action="admin-dashboard.html" method="post">
+        <div>
+          <label for="id-perusahaan">ID Perusahaan</label>
+          <input type="text" id="id-perusahaan" name="id-perusahaan" placeholder="Masukkan ID Perusahaan Anda" required autofocus>
+        </div>
+        
+        <div>
+          <label for="id-pengguna">ID Pengguna</label>
+          <input type="text" id="id-pengguna" name="id-pengguna" placeholder="Masukkan ID Pengguna Anda" required>
+        </div>
+
+        <div>
+          <label for="password">Kata Sandi</label>
+          <input type="password" id="password" name="password" placeholder="Masukkan Kata Sandi Anda" required>
+          <button type="button" id="togglePassword" aria-label="Tampilkan/sembunyikan kata sandi">
+            <img src="./assets/images/icons/eye-off.svg" width="10" alt="Toggle sandi">
+          </button>
+        </div>
+
+        <button type="submit">
+          <img src="./assets/images/icons/log-in.svg" width="15" alt="">
+          MASUK KE SISTEM
+        </button>
+      </form>
+
+      <hr>
+
+      <a href="/">
+        <img src="./assets/images/icons/house.svg" width="20" alt="">
+        Kembali ke Beranda
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p><small> 2026 Pantau Hadir App — Sistem Absensi Pekerja Proyek</small></p>
+    <!-- halaman ini dikerjakan oleh Adil Iskandar Z -->
+  </footer>
+
+</body>
+</html>
